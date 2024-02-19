@@ -133,4 +133,15 @@ pipeline{
             }
         }
     }
+    post{
+        always{
+            emailtext attachLog: true,
+            subject: "'${currentBuild.result}'"
+            body: "project: ${env.JOB_NAME}<br/>" +
+                "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                "URL: ${env.BUILD_URL}<br/>",
+            to: 'mukeshr2911@gmail.com',
+            attachmentsPattern: 'trivyfs.txt, trivyimg.txt'
+        }
+    }
 }
