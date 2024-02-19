@@ -136,7 +136,7 @@ pipeline{
     post{
         always{
             emailtext attachLog: true,
-            subject: "'${currentBuild.result}'"
+            subject: "'${currentBuild.result}'",
             body: "project: ${env.JOB_NAME}<br/>" +
                 "Build Number: ${env.BUILD_NUMBER}<br/>" +
                 "URL: ${env.BUILD_URL}<br/>",
