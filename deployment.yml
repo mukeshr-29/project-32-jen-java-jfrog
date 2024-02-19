@@ -1,9 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment 
+kind: Deployment
 metadata:
   name: java-project-deployment
-specs:
-  replicas: 3
+spec:
+  replicas: 2
   selector:
     matchLabels:
       app: java-project
