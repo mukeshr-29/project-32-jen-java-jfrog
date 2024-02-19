@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: java-project-deployment
+specs:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: java-project
+  template:
+    metadata:
+      labels:
+        app: java-project
+    spec:
+      containers:
+      - name: java-project
+        image: mukeshr29/java-project:latest
+        ports:
+        - containerPort: 8080
+
