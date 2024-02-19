@@ -95,5 +95,42 @@ pipeline{
                 )
             }
         }
+        stage('trivy filescan'){
+            steps{
+                sh 'trivy fs . > trivyfs.txt'
+            }
+        }
+        stage('docker build and tag'){
+            steps{
+                script{
+                    docker.withRegistry('',DOCKER_PASS){
+                        docker_image = docker.build "${IMAGE_NAME}"
+                    }
+                }
+            }
+        }
+        stage('trivy image scan'){
+            steps{
+                sh 'trivy image mukeshr29/java-project > trivyimg.txt'
+            }
+        }
+        stage('built docker img push'){
+            steps{
+                script{
+                    docker.withRegistry('',DOCKER_PASS){
+                        docker_image.push("${IMAGE_TAG}")
+                        docker_image.push('latest')
+                    }
+                }
+            }
+        }
+        stage('cleanup artifacts'){
+            steps{
+                script{
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker rmi ${IMAGE_NAME}:latest"
+                }
+            }
+        }
     }
 }
