@@ -132,16 +132,26 @@ pipeline{
                 }
             }
         }
-    }
-    post{
-        always{
-            emailtext attachLog: true,
-            subject: "'${currentBuild.result}'",
-            body: "project: ${env.JOB_NAME}<br/>" +
-                "Build Number: ${env.BUILD_NUMBER}<br/>" +
-                "URL: ${env.BUILD_URL}<br/>",
-            to: 'mukeshr2911@gmail.com',
-            attachmentsPattern: 'trivyfs.txt, trivyimg.txt'
+        stage('deploy to eks'){
+            steps{
+                script{
+                    withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: ''){
+                        sh 'kubectl apply -f deployment.yml'
+                        sh 'kubectl apply -f service.yml'
+                    }
+                }
+            }
         }
     }
+    // post{
+    //     always{
+    //         emailtext attachLog: true,
+    //         subject: "'${currentBuild.result}'",
+    //         body: "project: ${env.JOB_NAME}<br/>" +
+    //             "Build Number: ${env.BUILD_NUMBER}<br/>" +
+    //             "URL: ${env.BUILD_URL}<br/>",
+    //         to: 'mukeshr2911@gmail.com',
+    //         attachmentsPattern: 'trivyfs.txt, trivyimg.txt'
+    //     }
+    // }
 }
